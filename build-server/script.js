@@ -1,13 +1,16 @@
 const { exec } =require("child_process")
 const { path } = require("path" )
 import {S3Client , PutObjectCommand } from '@aws-sdk/client-s3'
-import { fs } from "fs  "
+import fs from "fs"
+import dotenv from "dotenv"
+
+dotenv.config();
 
 const S3Client=new S3Client({
-    region:'',
+    region:'auto',
     credentials:{
-        accessKeyId:'',
-        secretAccessKeyId:'',
+        accessKeyId:process.env.accessKeyId,
+        secretAccessKeyId:process.env.secretAccessKeyId,
     }
 
 })
