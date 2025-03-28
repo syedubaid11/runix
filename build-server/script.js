@@ -3,6 +3,7 @@ const { path } = require("path" )
 import {S3Client , PutObjectCommand } from '@aws-sdk/client-s3'
 import fs from "fs"
 import dotenv from "dotenv"
+import { mime, lookup } from "mime-types"
 
 dotenv.config();
 
@@ -15,6 +16,8 @@ const S3Client=new S3Client({
 
 })
 
+const projectId=process.env.PROJECT_ID;
+
 async function init(){
     console.log('Genrating...')
     const repoPath=path.join(__dirname,'output')
@@ -25,10 +28,23 @@ async function init(){
 
     executePath.stdout.on("error",()=>{console.log('Error while building :',error.toString())})
 
-    executePath.on("close",()=>{
+    executePath.on("close",async()=>{
         console.log('Build Complete!')
         const distFolderPath=path.join(__dirname,'output','dist')
         const distFolderContents=fs.readdirSync(distFolderPath,{recursive:true}) //getting all the build folder contents and set recursive:true to get all the content within subfolders.
+
+        for(const filePath of distFolderContents){
+            if(fs.lstatsync(filePath).isDirectory())continue;
+
+            const command=new PutObjectCommand({
+                Bucket:'',
+                Key:'__outputs/${[PROJECT_ID]/${filePath}}',
+                Body:fs.read,
+                ContentType:mime.lookup(filePath),       //using mime lookup to get the contentType to store in bucket
+            }) 
+            await S3Client.send(command)
+        }
+        console.log('completed!')
     })
 
     
