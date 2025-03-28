@@ -8,7 +8,7 @@ import { mime, lookup } from "mime-types"
 dotenv.config();
 
 const S3Client=new S3Client({
-    region:'auto',
+    region:'ap-south-1',
     credentials:{
         accessKeyId:process.env.accessKeyId,
         secretAccessKeyId:process.env.secretAccessKeyId,
@@ -36,15 +36,21 @@ async function init(){
         for(const filePath of distFolderContents){
             if(fs.lstatsync(filePath).isDirectory())continue;
 
+            console.log(`Uploading ${filePath} ....`)
+
             const command=new PutObjectCommand({
-                Bucket:'',
+                Bucket:'runix-bucket',
                 Key:'__outputs/${[PROJECT_ID]/${filePath}}',
                 Body:fs.read,
                 ContentType:mime.lookup(filePath),       //using mime lookup to get the contentType to store in bucket
-            }) 
-            await S3Client.send(command)
+            })
+            try {
+               const sendCommand=await S3Client.send(command)
+               console.log('Uploaded!!')
+            } catch (error) {
+                console.log('There was an error :',error)
+            } 
         }
-        console.log('completed!')
     })
 
     
