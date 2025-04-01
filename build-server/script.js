@@ -1,13 +1,18 @@
-const { exec } =require("child_process")
-const { path } = require("path" )
+import { exec } from 'child_process'
+import path from 'path'
 import {S3Client , PutObjectCommand } from '@aws-sdk/client-s3'
 import fs from "fs"
 import dotenv from "dotenv"
-import { mime, lookup } from "mime-types"
+import mime from 'mime-types'
+import { fileURLToPath } from 'url'
+
+//dirname
+const __filename=fileURLToPath (import.meta.url)
+const __dirname=path.dirname(__filename)
 
 dotenv.config();
 
-const S3Client=new S3Client({
+const S3=new S3Client({
     region:'ap-south-1',
     credentials:{
         accessKeyId:process.env.accessKeyId,
@@ -24,7 +29,7 @@ async function init(){
 
     const executePath=exec(`cd ${repoPath} && npm install && npm run build`) //start the build 
 
-    executePath.stdout.on("data",()=>{console.log(data.toString())})
+    executePath.stdout.on('data',(data)=>{console.log(data.toString())})
 
     executePath.stdout.on("error",()=>{console.log('Error while building :',error.toString())})
 
@@ -45,7 +50,7 @@ async function init(){
                 ContentType:mime.lookup(filePath),       //using mime lookup to get the contentType to store in bucket
             })
             try {
-               const sendCommand=await S3Client.send(command)
+               const sendCommand=await S3.send(command)
                console.log('Uploaded!!')
             } catch (error) {
                 console.log('There was an error :',error)
