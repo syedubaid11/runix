@@ -24,7 +24,8 @@ const S3=new S3Client({
 const projectId=process.env.PROJECT_ID;
 
 async function init(){
-    console.log('Genrating...')
+    console.log('Generating...')
+
     const repoPath=path.join(__dirname,'output')
 
     const executePath=exec(`cd ${repoPath} && npm install && npm run build`) //start the build 
@@ -39,7 +40,14 @@ async function init(){
         const distFolderContents=fs.readdirSync(distFolderPath,{recursive:true}) //getting all the build folder contents and set recursive:true to get all the content within subfolders.
 
         for(const filePath of distFolderContents){
-            if(fs.lstatsync(filePath).isDirectory())continue;
+            try {
+                if(fs.lstatSync(filePath).isDirectory())continue;
+                
+            } catch (error) {
+                console.log('error is ',error)
+                
+            }
+
 
             console.log(`Uploading ${filePath} ....`)
 
