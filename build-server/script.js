@@ -6,12 +6,13 @@ import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import mime from 'mime-types';
 import Redis from 'ioredis';
 import { fileURLToPath } from 'url';
-import { configDotenv } from 'dotenv'
+import dotenv from "dotenv"
 
+dotenv.config();
 // const publisher = new Redis('')
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-configDotenv();
+
 
 const s3Client = new S3Client({
     region: 'ap-south-1',
@@ -31,6 +32,7 @@ const PROJECT_ID = process.env.PROJECT_ID
 async function init() {
     console.log('Executing script.js')
     console.log('Build Started')
+
     // publishLog('Build Started...')
     const outDirPath = path.join(__dirname, 'output')
 
@@ -62,7 +64,7 @@ async function init() {
             // publishLog(`uploading ${file}`)
 
             const command = new PutObjectCommand({
-                Bucket: 'vercel-clone-outputs',
+                Bucket: 'runix-bucket',
                 Key: `__outputs/${PROJECT_ID}/${file}`,
                 Body: fs.createReadStream(filePath),
                 ContentType: mime.lookup(filePath)
