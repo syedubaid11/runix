@@ -18,8 +18,13 @@ app.use((req,res)=>{
 
     const resolvesTo=`${BASE_PATH}/${subdomain}`
 
-    proxy.web(req,res,{target:resolvesTo,changeOrigin:true})
+    proxy.web(req,res,{target:resolvesTo, changeOrigin:true})
+})
 
-
-
+proxy.on('proxyWeb',(proxyReq,req,res)=>{
+    const url=req.url
+    if(url=="/"){
+        proxyReq.path+='index.html'
+        return proxyReq;
+    }
 })
