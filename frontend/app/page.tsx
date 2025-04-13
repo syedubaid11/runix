@@ -1,12 +1,27 @@
 import Image from "next/image";
 import { HomeSection } from "./pages/home/page";
+import { Sidebar } from "./components/sidebar";
+import { About } from "./components/about";
 
 export default function Home() {
+
+
   return (
-    <div className="bg-grid-pattern w-screen h-screen flex items-center justify-center">
+    <div className="bg-grid-pattern w-screen h-screen">
+    <div className="absolute ">
+      <Sidebar/>
+    </div>
+    <div className="flex w-full h-full items-center justify-center">
       <div className="border-1 border-gray-200 shadow-2xl bg-gradient-to-br from-transparent via-white to-white w-[800px] h-[450px] rounded-2xl flex items-center justify-center">
       <HomeSection/>
       </div>
     </div>
+
+    <div id="about">
+      <About/>
+    </div>
+
+    </div>
+
   );
 }
