@@ -6,7 +6,7 @@ const PORT=8000;
 
 const BASE_PATH="https://runix-bucket.s3.ap-south-1.amazonaws.com/__outputs/"
 
-const proxy=httpProxy.createProxy()
+const proxy=httpProxy.createProxysys()
 
 app.listen(PORT,()=>{
     console.log('Reverse Proxy listening on PORT:',PORT)
