@@ -2,6 +2,7 @@ import Image from "next/image";
 import { HomeSection } from "./pages/home/page";
 import { Sidebar } from "./components/sidebar";
 import { About } from "./components/about";
+import { SystemD } from "./components/systemd";
 
 export default function Home() {
 
@@ -19,6 +20,9 @@ export default function Home() {
 
     <div id="about">
       <About/>
+    </div>
+    <div id="systemd">
+      <SystemD/>
     </div>
 
     </div>
