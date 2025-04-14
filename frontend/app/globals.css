@@ -1,9 +1,13 @@
 @import "tailwindcss";
 
-.bg-grid-pattern{
+.bg-grid-pattern {
   background-color: #fff;
-  background-image: linear-gradient(to right, #e5e7eb4d 1.5px, #0000 1.5px), linear-gradient(#e5e7eb4d 1px, #0000 1px);
+  background-image: 
+    linear-gradient(to right, #e5e7eb4d 1.5px, #0000 1.5px),
+    linear-gradient(#e5e7eb4d 1px, #0000 1px);
   background-size: 40px 40px;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
 }
 
 body {
