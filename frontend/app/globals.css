@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+.bg-grid-pattern{
+  background-color: #fff;
+  background-image: linear-gradient(to right, #e5e7eb4d 1.5px, #0000 1.5px), linear-gradient(#e5e7eb4d 1px, #0000 1px);
+  background-size: 40px 40px;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+html{
+  scroll-behavior: smooth;
+}
