@@ -18,7 +18,7 @@ const s3Client = new S3Client({
     region: 'ap-south-1',
     credentials: {
         accessKeyId: process.env.accessKeyId,
-        secretAccessKey: process.env.secretAccessKey
+        secretAccessKey: process.env.secretAccessKeyId
     }
 })
 
@@ -63,7 +63,7 @@ async function init() {
             // publishLog(`uploading ${file}`)
 
             const command = new PutObjectCommand({
-                Bucket: 'runix-bucket',
+                Bucket: 'runix-v2',
                 Key: `__outputs/${PROJECT_ID}/${file}`,
                 Body: fs.createReadStream(filePath),
                 ContentType: mime.lookup(filePath)
