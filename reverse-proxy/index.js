@@ -22,8 +22,9 @@ app.use((req,res)=>{
     proxy.web(req,res,{target:resolvesTo, changeOrigin:true})
 })
 
-proxy.on('proxyWeb',(proxyReq,req,res)=>{
+proxy.on('proxyReq',(proxyReq,req,res)=>{
     const url=req.url
+    console.log(url)
     if(url=="/"){
         proxyReq.path+='index.html'
         return proxyReq;
