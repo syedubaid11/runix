@@ -1,20 +1,28 @@
 "use client"
 import { Toaster , toast } from "react-hot-toast";
 import { useState } from "react";
+import axios from 'axios';
+
 
 export const HomeSection=()=>{
     const [input,setInput]=useState('');
 
+    const handleRequest=()=>{
+        
+        
+    }
+
     const handleSubmit=(e:React.FormEvent)=>{
         if(!input.trim()){
             toast.error('Empty field!');
-
         }
         else{
             toast.success('Searching...')
         }
         e.preventDefault();
-        console.log(input);
+
+        console.log(input)
+
         setInput('');
     }
     return(
