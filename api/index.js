@@ -14,7 +14,7 @@ const ecs=new ecsClient({
 
 app.post('/project',(req,res)=>{
     const gitUrl=req.body;
-    const projectSlug=
+    const projectSlug=s
 })
 
 app.listen(PORT,()=>{
