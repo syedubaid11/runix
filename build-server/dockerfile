@@ -20,3 +20,4 @@ RUN chmod +x main.sh
 RUN chmod +x script.js
 
 ENTRYPOINT [ "/bin/bash", "/home/app/main.sh" ]
+
