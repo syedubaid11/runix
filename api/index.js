@@ -1,14 +1,14 @@
 import express from 'express'
-import slugify from 'slugify';
-import { CreateCapacityProviderCommand, ECSClient, LaunchType, RunTaskCommand } from '@aws-sdk/client-ecs';
+import { ECSClient, RunTaskCommand} from '@aws-sdk/client-ecs';
+import 'dotenv/config'
 
 const app=express();
 const PORT=9000;
 
-const ecs=new ECSClient({
+const client=new ECSClient({
     credentials:{
-        accessKeyId:'',
-        secretAccessKey:''
+        accessKeyId:process.env.accessKeyId,
+        secretAccessKey:process.env.secretAccessKey
     }
 }) 
 
@@ -25,28 +25,36 @@ const input={
             {
                 name:'GIT_REPOSITORY_URL',
                 value:project_link,
+                name:'PROJECT_ID',
+                value:'p3'
             }
         ]
-      }
+      },
+      networkConfiguration: { // NetworkConfiguration
+        awsvpcConfiguration: { // AwsVpcConfiguration
+          subnets: [ // StringList // required
+            "subnet-09ad8698a74dc58c5",
+            "subnet-04966e3417fc2b50e",
+            "subnet-0befcebc3139a1062",
+          ],
+          securityGroups: [
+            "sg-068303971d96858e5",
+          ],
+          assignPublicIp: "ENABLED" ,
+        },
+      },
 
 }
 
-app.post('/project',(req,res)=>{
-    const gitUrl=req.body;
+app.post('/project',async(req,res)=>{
+    // const gitUrl=req.body;
     console.log('req is here')
     // const projectSlug=slugify(req.body);
-    try {
-        const command=new RunTaskCommand(input)
-    } catch (error) {
-        console.log(error);
-        
-    }
-    
+    const command=new RunTaskCommand(input)
+    const response = await client.send(command);
+
 })
 
-const test="hehehehehe   fasdfds fdfsdfsdf"
-const slug=slugify(test);
-console.log(slug)
 
 app.listen(PORT,()=>{
     console.log(`Api server is running on ${PORT}`)
