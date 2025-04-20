@@ -2,6 +2,7 @@ import express from 'express'
 import { ECSClient, RunTaskCommand} from '@aws-sdk/client-ecs';
 import 'dotenv/config'
 
+
 const app=express();
 const PORT=9000;
 
@@ -22,12 +23,8 @@ const input={
         containerOverrides:[
         ],
         environment:[
-            {
-                name:'GIT_REPOSITORY_URL',
-                value:project_link,
-                name:'PROJECT_ID',
-                value:'p3'
-            }
+                {name:'GIT_REPOSITORY_URL',value:project_link},
+                {name:'PROJECT_ID',value:'p3'} 
         ]
       },
       networkConfiguration: { // NetworkConfiguration
@@ -50,8 +47,10 @@ app.post('/project',async(req,res)=>{
     // const gitUrl=req.body;
     console.log('req is here')
     // const projectSlug=slugify(req.body);
-    const command=new RunTaskCommand(input)
-    const response = await client.send(command);
+    const body=await req.body;
+    console.log(body);
+    // const command=new RunTaskCommand(input)
+    // const response = await client.send(command);
 
 })
 
