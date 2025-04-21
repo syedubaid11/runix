@@ -25,7 +25,6 @@ app.post('/project',async (req,res)=>{
 
   if(result){
     const {git_url,project_id}=req.body;
-    console.log(git_url)
 
     const command=new RunTaskCommand({
       launchType:"FARGATE",
