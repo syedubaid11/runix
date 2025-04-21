@@ -33,11 +33,15 @@ app.post('/project',async (req,res)=>{
       taskDefinition:'arn:aws:ecs:ap-south-1:977099018494:task-definition/runix-v2:4',
       overrides:{
         containerOverrides:[
+          {
+            name:'runix-v2-image',
+            environment:[
+              {name:'GIT_REPOSITORY__URL',value: git_url},
+              {name:'PROJECT_ID',value: project_id }
+      ]
+          }
         ],
-        environment:[
-                {name:'GIT_REPOSITORY_URL',value: git_url},
-                {name:'PROJECT_ID',value: project_id }
-        ]
+        
       },
       networkConfiguration: { // NetworkConfiguration
         awsvpcConfiguration: { // AwsVpcConfiguration
