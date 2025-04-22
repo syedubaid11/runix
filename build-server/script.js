@@ -9,7 +9,9 @@ import { fileURLToPath } from 'url';
 import dotenv from "dotenv"
 
 dotenv.config();
-// const publisher = new Redis('')
+
+const publisher=new Redis('rediss://default:AVNS_3YlUMDZIM_YT99MQfAR@valkey-3e0c4dfb-syedabuubaid-003d.i.aivencloud.com:25182');
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -24,6 +26,8 @@ const s3Client = new S3Client({
 const PROJECT_ID = process.env.PROJECT_ID;
 
 async function init() {
+    publisher.publish('Executing script.js')
+    publisher.publish('Build Started')
     console.log('Executing script.js')
     console.log('Build Started');
     const outDirPath = path.join(__dirname, 'output');
@@ -34,27 +38,32 @@ async function init() {
     //share logs when data is streamed
     p.stdout.on('data', function (data) {
         console.log(data.toString())
+        publisher.publish(data.toString());
         
     })
 
     p.stdout.on('error', function (data) {
         console.log('Error', data.toString())
+        publisher.publish(data.toString());
       
     })
 
     p.on('close', async function () {
         console.log('Build Complete')
+        publisher.publish('Build Complete!')
        
         const distFolderPath = path.join(__dirname, 'output', 'dist')
         const distFolderContents = fs.readdirSync(distFolderPath, { recursive: true })
-
+          
         console.log('Starting upload')
-        
+        publisher.publish('Starting the upload...') 
+
         for (const file of distFolderContents) {
             const filePath = path.join(distFolderPath, file)
             if (fs.lstatSync(filePath).isDirectory()) continue;
 
             console.log('uploading', filePath)
+            publisher.publish('uploading',filePath);
             
             //uploading to s3 bucket
             const command = new PutObjectCommand({
@@ -67,9 +76,11 @@ async function init() {
             await s3Client.send(command)
             
             console.log('uploaded', filePath)
+            publisher.publish('uploaded',filePath);
         }
         // publishLog(`Done`)
         console.log('Done...')
+        publisher.publish('Donee...')
     })
 }
 

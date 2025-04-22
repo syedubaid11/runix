@@ -2,10 +2,16 @@ import express from 'express'
 import { ECSClient, RunTaskCommand} from '@aws-sdk/client-ecs';
 import 'dotenv/config'
 import { z } from 'zod';
+import cors from 'cors';
 
 const app=express();
 const PORT=9000;
 app.use(express.json());
+app.use(cors({
+  origin:'http://localhost:3000',
+  methods:['POST'],
+  credentials:true,
+}))
 
 export const uploadSchema=z.object({
   git_url:z.string(),
@@ -21,8 +27,8 @@ const client=new ECSClient({
 }) 
 
 app.post('/project',async (req,res)=>{
-  const result=await uploadSchema.safeParse(req.body);
-
+  const result=uploadSchema.safeParse(req.body);
+  console.log(req.body);
   if(result){
     const {git_url,project_id}=req.body;
 

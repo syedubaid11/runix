@@ -2,6 +2,7 @@
 import { Toaster , toast } from "react-hot-toast";
 import { useState } from "react";
 import axios from 'axios';
+import 'redis' from 'ioredis'
 
 
 export const HomeSection=()=>{
@@ -12,11 +13,25 @@ export const HomeSection=()=>{
         
     }
 
-    const handleSubmit=(e:React.FormEvent)=>{
+    const handleSubmit=async(e:React.FormEvent)=>{
         if(!input.trim()){
             toast.error('Empty field!');
         }
         else{
+            const repolink=input.trim();
+            try {
+                console.log(input.trim())
+                const response=await axios.post('http://localhost:9000/project',{
+                    git_url: repolink,
+                    project_id:"test2"
+                })
+                console.log(response);
+                
+            } catch (error) {
+                console.log('Request Failed',error);
+                
+            }
+           
             toast.success('Searching...')
         }
         e.preventDefault();
