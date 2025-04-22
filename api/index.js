@@ -1,11 +1,30 @@
 import express from 'express'
 import { ECSClient, RunTaskCommand} from '@aws-sdk/client-ecs';
+import { createServer } from 'node:http';
 import 'dotenv/config'
 import { z } from 'zod';
 import cors from 'cors';
+import { Server } from 'socket.io';
+import Redis from 'ioredis';
 
 const app=express();
 const PORT=9000;
+const server=createServer(app); //node http server
+const io=new Server(server);    //node server mounting on socket io server
+
+
+io.on('connection',(socket)=>{
+  console.log('A user has connected');
+  socket.on('disconnect',()=>{
+    console.log('User has disconnected')
+  })
+})
+
+const redis=new Redis(process.env.aiven_redis);
+
+
+
+
 app.use(express.json());
 app.use(cors({
   origin:'http://localhost:3000',
@@ -35,7 +54,7 @@ app.post('/project',async (req,res)=>{
     const command=new RunTaskCommand({
       launchType:"FARGATE",
       cluster:"runix-cluster",
-      taskDefinition:'arn:aws:ecs:ap-south-1:977099018494:task-definition/runix-v2:4',
+      taskDefinition:'arn:aws:ecs:ap-south-1:977099018494:task-definition/runix-v2:5',
       overrides:{
         containerOverrides:[
           {
@@ -63,6 +82,13 @@ app.post('/project',async (req,res)=>{
       },
     });
     const response=await client.send(command);
+
+    // const initRedisLogs=()=>{
+    //   valkey.get(`${project_id}`,(value)=>{
+    //     console.log('Value is:',value);
+    //   })   
+    // }
+    
 
   }
   else{

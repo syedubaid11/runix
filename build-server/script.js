@@ -26,8 +26,8 @@ const s3Client = new S3Client({
 const PROJECT_ID = process.env.PROJECT_ID;
 
 async function init() {
-    publisher.publish('Executing script.js')
-    publisher.publish('Build Started')
+    publisher.publish(`logs:${PROJECT_ID}`,'Executing script.js')
+    publisher.publish(`logs:${PROJECT_ID}`,'Build Started')
     console.log('Executing script.js')
     console.log('Build Started');
     const outDirPath = path.join(__dirname, 'output');
@@ -38,32 +38,32 @@ async function init() {
     //share logs when data is streamed
     p.stdout.on('data', function (data) {
         console.log(data.toString())
-        publisher.publish(data.toString());
+        publisher.publish(`logs:${PROJECT_ID}`,data.toString());
         
     })
 
     p.stdout.on('error', function (data) {
         console.log('Error', data.toString())
-        publisher.publish(data.toString());
+        publisher.publish(`logs:${PROJECT_ID}`,data.toString());
       
     })
 
     p.on('close', async function () {
         console.log('Build Complete')
-        publisher.publish('Build Complete!')
+        publisher.publish(`logs:${PROJECT_ID}`,'Build Complete!')
        
         const distFolderPath = path.join(__dirname, 'output', 'dist')
         const distFolderContents = fs.readdirSync(distFolderPath, { recursive: true })
           
         console.log('Starting upload')
-        publisher.publish('Starting the upload...') 
+        publisher.publish(`logs:${PROJECT_ID}`,'Starting the upload...') 
 
         for (const file of distFolderContents) {
             const filePath = path.join(distFolderPath, file)
             if (fs.lstatSync(filePath).isDirectory()) continue;
 
             console.log('uploading', filePath)
-            publisher.publish('uploading',filePath);
+            publisher.publish(`logs:${PROJECT_ID}`,'uploading',filePath);
             
             //uploading to s3 bucket
             const command = new PutObjectCommand({
@@ -76,11 +76,11 @@ async function init() {
             await s3Client.send(command)
             
             console.log('uploaded', filePath)
-            publisher.publish('uploaded',filePath);
+            publisher.publish(`logs:${PROJECT_ID}`,'uploaded',filePath);
         }
         // publishLog(`Done`)
         console.log('Done...')
-        publisher.publish('Donee...')
+        publisher.publish(`logs:${PROJECT_ID}`,'Donee...')
     })
 }
 

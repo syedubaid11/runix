@@ -3,8 +3,6 @@ import { Toaster , toast } from "react-hot-toast";
 import { useState } from "react";
 import axios from 'axios';
 
-
-
 export const HomeSection=()=>{
     const [input,setInput]=useState('');
 
@@ -22,7 +20,7 @@ export const HomeSection=()=>{
                 console.log(input.trim())
                 const response=await axios.post('http://localhost:9000/project',{
                     git_url: repolink,
-                    project_id:"test2"
+                    project_id:"test3"
                 })
                 console.log(response);
                 
