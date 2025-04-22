@@ -10,7 +10,7 @@ import dotenv from "dotenv"
 
 dotenv.config();
 
-const publisher=new Redis('rediss://default:AVNS_3YlUMDZIM_YT99MQfAR@valkey-3e0c4dfb-syedabuubaid-003d.i.aivencloud.com:25182');
+const publisher=new Redis(process.env.aiven_redis);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

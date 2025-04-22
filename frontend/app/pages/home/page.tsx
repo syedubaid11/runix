@@ -2,14 +2,13 @@
 import { Toaster , toast } from "react-hot-toast";
 import { useState } from "react";
 import axios from 'axios';
-import 'redis' from 'ioredis'
+
 
 
 export const HomeSection=()=>{
     const [input,setInput]=useState('');
 
     const handleRequest=()=>{
-        
         
     }
 
