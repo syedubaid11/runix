@@ -10,7 +10,7 @@ import dotenv from "dotenv"
 
 dotenv.config();
 
-const publisher=new Redis(process.env.aiven_redis);
+const publisher=new Redis(process.env.upstash_redis);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -63,7 +63,7 @@ async function init() {
             if (fs.lstatSync(filePath).isDirectory()) continue;
 
             console.log('uploading', filePath)
-            publisher.publish(`logs:${PROJECT_ID}`,'uploading',filePath);
+            publisher.publish(`logs:${PROJECT_ID}`,`uploading ${filePath}`);
             
             //uploading to s3 bucket
             const command = new PutObjectCommand({
@@ -76,7 +76,7 @@ async function init() {
             await s3Client.send(command)
             
             console.log('uploaded', filePath)
-            publisher.publish(`logs:${PROJECT_ID}`,'uploaded',filePath);
+            publisher.publish(`logs:${PROJECT_ID}`,`uploaded ${filePath}`);
         }
         // publishLog(`Done`)
         console.log('Done...')

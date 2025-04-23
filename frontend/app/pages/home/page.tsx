@@ -20,7 +20,7 @@ export const HomeSection=()=>{
                 console.log(input.trim())
                 const response=await axios.post('http://localhost:9000/project',{
                     git_url: repolink,
-                    project_id:"test3"
+                    project_id:"test6"
                 })
                 console.log(response);
                 

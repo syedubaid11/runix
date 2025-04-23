@@ -5,24 +5,26 @@ import 'dotenv/config'
 import { z } from 'zod';
 import cors from 'cors';
 import { Server } from 'socket.io';
-import Redis from 'ioredis';
+import { Redis } from 'ioredis';
 
 const app=express();
 const PORT=9000;
-const server=createServer(app); //node http server
-const io=new Server(server);    //node server mounting on socket io server
 
+const subscriber=new Redis(process.env.upstash_redis);
+
+const io=new Server({cors:'*'});    //allowing all origins to connect 
+io.listen(9002,()=>{
+  console.log('Socket is running on 9001')
+})
 
 io.on('connection',(socket)=>{
+  const logs=subscriber.subscribe('logs:*');
+  console.log(logs);
   console.log('A user has connected');
   socket.on('disconnect',()=>{
     console.log('User has disconnected')
   })
 })
-
-const redis=new Redis(process.env.aiven_redis);
-
-
 
 
 app.use(express.json());
@@ -54,7 +56,7 @@ app.post('/project',async (req,res)=>{
     const command=new RunTaskCommand({
       launchType:"FARGATE",
       cluster:"runix-cluster",
-      taskDefinition:'arn:aws:ecs:ap-south-1:977099018494:task-definition/runix-v2:5',
+      taskDefinition:'arn:aws:ecs:ap-south-1:977099018494:task-definition/runix-v2:6',
       overrides:{
         containerOverrides:[
           {
@@ -83,10 +85,9 @@ app.post('/project',async (req,res)=>{
     });
     const response=await client.send(command);
 
-    // const initRedisLogs=()=>{
-    //   valkey.get(`${project_id}`,(value)=>{
-    //     console.log('Value is:',value);
-    //   })   
+    // function redisLogs(){
+    //   const logs=subscriber.subscribe(`logs:${project_id}`);
+    //   console.log(logs);
     // }
     
 
