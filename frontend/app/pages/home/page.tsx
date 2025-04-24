@@ -19,7 +19,7 @@ export const HomeSection=()=>{
             socket.on('log', ({ channel, message }) => {               
                 setLogs((prevLogs)=>[...prevLogs,`${message}`])
                 console.log(`[${channel}]: ${message}`);
-                if(message==="Donee..."){
+                if(message==="Deployment Complete"){
                     setLoading(false);
                     toast.success('Deployment Complete!')
                 }

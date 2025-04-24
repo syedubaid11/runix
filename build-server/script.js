@@ -78,9 +78,8 @@ async function init() {
             console.log('uploaded', filePath)
             publisher.publish(`logs:${PROJECT_ID}`,`uploaded ${filePath}`);
         }
-        // publishLog(`Done`)
         console.log('Done...')
-        publisher.publish(`logs:${PROJECT_ID}`,'Donee...')
+        publisher.publish(`logs:${PROJECT_ID}`,'Deployment Complete')
     })
 }
 
