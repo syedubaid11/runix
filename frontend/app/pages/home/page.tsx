@@ -10,7 +10,7 @@ export const HomeSection=()=>{
     const [loading,setLoading]=useState(false);
     const [input,setInput]=useState('');
 
-    const ProjectId='T912'
+    const ProjectId='T9121'
 
     useEffect(()=>{
         try {
@@ -25,7 +25,7 @@ export const HomeSection=()=>{
                 }
               });  
         } catch (error) {
-            console.log('error while connecting to socket',error);
+            console.log('error while connectingq to socket',error);
         }
     },[ProjectId])
 
