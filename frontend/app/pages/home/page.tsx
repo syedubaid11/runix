@@ -1,9 +1,26 @@
 "use client"
 import { Toaster , toast } from "react-hot-toast";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from 'axios';
+import { io } from 'socket.io-client';
 
 export const HomeSection=()=>{
+    const [logs,setLogs]=useState([]);
+    const ProjectId='T7'
+
+    useEffect(()=>{
+        try {
+            const socket=io('http://localhost:9002');
+            console.log(socket);
+            socket.on(`logs:${ProjectId}`,(log)=>{
+                console.log('Logs receieved',log);
+            })   
+        } catch (error) {
+            console.log('error while connecting to socket',error);
+        }
+    },[ProjectId])
+
+    
     const [input,setInput]=useState('');
 
     const handleRequest=()=>{
@@ -20,7 +37,7 @@ export const HomeSection=()=>{
                 console.log(input.trim())
                 const response=await axios.post('http://localhost:9000/project',{
                     git_url: repolink,
-                    project_id:"test6"
+                    project_id:ProjectId
                 })
                 console.log(response);
                 
