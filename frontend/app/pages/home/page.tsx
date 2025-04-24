@@ -3,18 +3,26 @@ import { Toaster , toast } from "react-hot-toast";
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import { io } from 'socket.io-client';
+import '../../globals.css'
 
 export const HomeSection=()=>{
     const [logs,setLogs]=useState(['']);
-    const ProjectId='T91'
+    const [loading,setLoading]=useState(false);
+    const [input,setInput]=useState('');
+
+    const ProjectId='T912'
 
     useEffect(()=>{
         try {
             const socket=io('http://localhost:9002');
             console.log(socket);
-            socket.on('log', ({ channel, message }) => {
+            socket.on('log', ({ channel, message }) => {               
                 setLogs((prevLogs)=>[...prevLogs,`${message}`])
                 console.log(`[${channel}]: ${message}`);
+                if(message==="Donee..."){
+                    setLoading(false);
+                    toast.success('Deployment Complete!')
+                }
               });  
         } catch (error) {
             console.log('error while connecting to socket',error);
@@ -22,17 +30,20 @@ export const HomeSection=()=>{
     },[ProjectId])
 
     
-    const [input,setInput]=useState('');
-
-    const handleRequest=()=>{
-        
-    }
-
-    const handleSubmit=async(e:React.FormEvent)=>{
+    const isValidRepoUrl = (url:string) => {
         if(!input.trim()){
             toast.error('Empty field!');
         }
-        else{
+        const githubRegex = /^https:\/\/github\.com\/[^\/\s]+\/[^\/\s]+(\.git)?$/;
+        return githubRegex.test(url);
+      };
+  
+    const handleSubmit=async(e:React.FormEvent)=>{
+        e.preventDefault();
+        if(!isValidRepoUrl(input)){
+            toast.error('Please enter a valid Repo Url');
+        }
+            setLoading(true);
             const repolink=input.trim();
             try {
                 console.log(input.trim())
@@ -40,24 +51,20 @@ export const HomeSection=()=>{
                     git_url: repolink,
                     project_id:ProjectId
                 })
-                console.log(response);
                 toast.success('Searching...')
+                console.log(response);
                 
             } catch (error) {
+                setLoading(false);
                 console.log('Request Failed',error);
                 
             }
-           
-        }
-        e.preventDefault();
-
-        console.log(input)
-
+        
         setInput('');
     }
-    const map=logs.map((item,key)=>{
+    const map=logs.map((item,index)=>{
         return(
-            <div className="font-bold">
+            <div key={index} className="font-light">
                 {item}
             </div>
         )
@@ -67,7 +74,13 @@ export const HomeSection=()=>{
         <div className="tracking-tight">
             <span className="tracking-tighter text-[100px] font-bold">runix</span><span className="text-[30px]">   deploy in seconds</span>
             <div className="flex flex-row items-center justify-center mt-[20px]">
-                  <form onSubmit={handleSubmit} className="flex items-center text-2xl" ><input type="text" value={input} onChange={(e)=>{setInput(e.target.value)}} placeholder="Enter the Repository Url..."/><button className="ml-[8px] border border-gray-200 text-2xl p-[5px] rounded-md hover:cursor-pointer hover:bg-gray-100 transition-all duration-300" type="submit">Submit</button></form>
+                  <form onSubmit={handleSubmit} className="flex items-center text-2xl  duration-300" >
+                    <input className="p-[3px] rounded-sm focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all"type="text" value={input} onChange={(e)=>{setInput(e.target.value)}} placeholder="Enter the Repository Url..."/>
+                    {loading ? <button className="loading-spinner">.</button> : <button className="ml-[8px] border border-gray-200 text-2xl p-[5px] rounded-md hover:cursor-pointer hover:bg-gray-100 transition-all duration-300" type="submit">
+                        Submit
+                    </button>}
+                    
+                   </form>
             </div>
             
             <Toaster position="bottom-center"/>
