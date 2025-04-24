@@ -18,7 +18,6 @@ io.listen(9002,()=>{
 })
 
 io.on('connection',(socket)=>{
-
   //subscribing to logs
   subscriber.psubscribe('logs:*',(err,count)=>{
     if(err){
@@ -29,7 +28,7 @@ io.on('connection',(socket)=>{
     }
     subscriber.on('pmessage',(pattern,channel,message)=>{
       console.log(`New log on channel ${channel}:${message}`);
-      socket.emit('log',{channel,message});
+      socket.emit('log',{channel,message});      //emitting logs
     })
   })
   console.log('A user has connected');

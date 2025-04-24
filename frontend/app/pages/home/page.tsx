@@ -5,16 +5,17 @@ import axios from 'axios';
 import { io } from 'socket.io-client';
 
 export const HomeSection=()=>{
-    const [logs,setLogs]=useState([]);
-    const ProjectId='T7'
+    const [logs,setLogs]=useState(['']);
+    const ProjectId='T91'
 
     useEffect(()=>{
         try {
             const socket=io('http://localhost:9002');
             console.log(socket);
-            socket.on(`logs:${ProjectId}`,(log)=>{
-                console.log('Logs receieved',log);
-            })   
+            socket.on('log', ({ channel, message }) => {
+                setLogs((prevLogs)=>[...prevLogs,`${message}`])
+                console.log(`[${channel}]: ${message}`);
+              });  
         } catch (error) {
             console.log('error while connecting to socket',error);
         }
@@ -40,13 +41,13 @@ export const HomeSection=()=>{
                     project_id:ProjectId
                 })
                 console.log(response);
+                toast.success('Searching...')
                 
             } catch (error) {
                 console.log('Request Failed',error);
                 
             }
            
-            toast.success('Searching...')
         }
         e.preventDefault();
 
@@ -54,13 +55,27 @@ export const HomeSection=()=>{
 
         setInput('');
     }
+    const map=logs.map((item,key)=>{
+        return(
+            <div className="font-bold">
+                {item}
+            </div>
+        )
+    })
     return(
+        <div className="flex flex-col justify-center items-center">
         <div className="tracking-tight">
             <span className="tracking-tighter text-[100px] font-bold">runix</span><span className="text-[30px]">   deploy in seconds</span>
             <div className="flex flex-row items-center justify-center mt-[20px]">
                   <form onSubmit={handleSubmit} className="flex items-center text-2xl" ><input type="text" value={input} onChange={(e)=>{setInput(e.target.value)}} placeholder="Enter the Repository Url..."/><button className="ml-[8px] border border-gray-200 text-2xl p-[5px] rounded-md hover:cursor-pointer hover:bg-gray-100 transition-all duration-300" type="submit">Submit</button></form>
             </div>
+            
             <Toaster position="bottom-center"/>
+
+        </div>
+        <div className="w-[550px] h-[200px] mt-[20px] overflow-y-auto">
+            {map}
+        </div>
         </div>
     )
 
