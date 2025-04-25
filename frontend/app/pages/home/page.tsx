@@ -9,8 +9,9 @@ export const HomeSection=()=>{
     const [logs,setLogs]=useState(['']);
     const [loading,setLoading]=useState(false);
     const [input,setInput]=useState('');
+    const [deployment,setDeployment]=useState(false);
 
-    const ProjectId='t10'
+    const ProjectId='t12'
 
     useEffect(()=>{
         try {
@@ -21,7 +22,10 @@ export const HomeSection=()=>{
                 console.log(`[${channel}]: ${message}`);
                 if(message==="Deployment Complete"){
                     setLoading(false);
-                    toast.success('Deployment Complete!')
+                    setDeployment(true);
+                    toast.success('Deployment Complete!');
+                    
+
                 }
               });  
         } catch (error) {
@@ -29,6 +33,11 @@ export const HomeSection=()=>{
         }
     },[ProjectId])
 
+
+    const handleDeployment=()=>{
+        const link=`http://${ProjectId}.localhost:8000`
+        window.location.href=link;
+    }
     
     const isValidRepoUrl = (url:string) => {
         if(!input.trim()){
@@ -72,7 +81,7 @@ export const HomeSection=()=>{
     return(
         <div className="flex flex-col justify-center items-center">
         <div className="tracking-tight">
-            <span className="tracking-tighter text-[55px] md:text-[100px] font-bold">runix</span><span className="text-[20px] md:text-[30px] font-mono">   deploy in seconds</span>
+            <span className="tracking-tighter text-[55px] md:text-[100px] font-bold">runix</span><span className="fade text-[20px] md:text-[30px] font-mono tracking-tight">   deploy in seconds</span>
             <div className="flex flex-row items-center justify-center mt-[20px]">
                   <form onSubmit={handleSubmit} className="flex items-center md:text-2xl  duration-300" >
                     <input className="cursor-pointer p-[3px] rounded-sm focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all"type="text" value={input} onChange={(e)=>{setInput(e.target.value)}} placeholder="Enter the Repository Url..."/>
@@ -89,6 +98,10 @@ export const HomeSection=()=>{
         <div className="w-3/4 md:w-[550px] h-[200px] mt-[20px] overflow-y-auto bg-transparent font-mono text-gray-500">
             {map}
         </div>
+         {deployment&&
+         <div className="mt-[40px]">
+            <button className="fade shadow-sm border border-gray-200 bg-transparent hover:bg-gray-50 p-[10px] rounded-md cursor-pointer transition-all duration-300" onClick={handleDeployment}>Deployed Project</button>
+          </div>}
         </div>
     )
 
