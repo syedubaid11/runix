@@ -10,7 +10,7 @@ export const HomeSection=()=>{
     const [loading,setLoading]=useState(false);
     const [input,setInput]=useState('');
 
-    const ProjectId='T9121'
+    const ProjectId='t10'
 
     useEffect(()=>{
         try {
@@ -72,12 +72,12 @@ export const HomeSection=()=>{
     return(
         <div className="flex flex-col justify-center items-center">
         <div className="tracking-tight">
-            <span className="tracking-tighter text-[55px] md:text-[100px] font-bold">runix</span><span className="text-[20px] md:text-[30px]">   deploy in seconds</span>
+            <span className="tracking-tighter text-[55px] md:text-[100px] font-bold">runix</span><span className="text-[20px] md:text-[30px] font-mono">   deploy in seconds</span>
             <div className="flex flex-row items-center justify-center mt-[20px]">
                   <form onSubmit={handleSubmit} className="flex items-center md:text-2xl  duration-300" >
-                    <input className="p-[3px] rounded-sm focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all"type="text" value={input} onChange={(e)=>{setInput(e.target.value)}} placeholder="Enter the Repository Url..."/>
-                    {loading ? <button className="loading-spinner">.</button> : <button className="ml-[8px] border border-gray-200 md:text-2xl p-[5px] rounded-md hover:cursor-pointer hover:bg-gray-100 transition-all duration-300" type="submit">
-                        Submit
+                    <input className="cursor-pointer p-[3px] rounded-sm focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all"type="text" value={input} onChange={(e)=>{setInput(e.target.value)}} placeholder="Enter the Repository Url..."/>
+                    {loading ?<button className="ml-[24px] font-mono text-[20px] flex flex-row items-center gap-[8px]"> <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none" className="hds-flight-icon--animation-loading animate-spin h-[25px] w-[25px]"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g fill="#000000" fill-rule="evenodd" clip-rule="evenodd"> <path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 8a8 8 0 1116 0A8 8 0 010 8z" opacity=".2"></path> <path d="M7.25.75A.75.75 0 018 0a8 8 0 018 8 .75.75 0 01-1.5 0A6.5 6.5 0 008 1.5a.75.75 0 01-.75-.75z"></path> </g> </g></svg> Processing</button> : <button className="font-mono ml-[8px] border border-gray-200 md:text-2xl p-[5px] rounded-md hover:cursor-pointer hover:bg-gray-100 transition-all duration-300" type="submit">
+                        submit
                     </button>}
                     
                    </form>
@@ -86,7 +86,7 @@ export const HomeSection=()=>{
             <Toaster position="bottom-center"/>
 
         </div>
-        <div className="w-3/4 md:w-[550px] h-[200px] mt-[20px] overflow-y-auto">
+        <div className="w-3/4 md:w-[550px] h-[200px] mt-[20px] overflow-y-auto bg-transparent font-mono text-gray-500">
             {map}
         </div>
         </div>
