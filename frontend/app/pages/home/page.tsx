@@ -72,11 +72,11 @@ export const HomeSection=()=>{
     return(
         <div className="flex flex-col justify-center items-center">
         <div className="tracking-tight">
-            <span className="tracking-tighter text-[100px] font-bold">runix</span><span className="text-[30px]">   deploy in seconds</span>
+            <span className="tracking-tighter text-[55px] md:text-[100px] font-bold">runix</span><span className="text-[20px] md:text-[30px]">   deploy in seconds</span>
             <div className="flex flex-row items-center justify-center mt-[20px]">
-                  <form onSubmit={handleSubmit} className="flex items-center text-2xl  duration-300" >
+                  <form onSubmit={handleSubmit} className="flex items-center md:text-2xl  duration-300" >
                     <input className="p-[3px] rounded-sm focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all"type="text" value={input} onChange={(e)=>{setInput(e.target.value)}} placeholder="Enter the Repository Url..."/>
-                    {loading ? <button className="loading-spinner">.</button> : <button className="ml-[8px] border border-gray-200 text-2xl p-[5px] rounded-md hover:cursor-pointer hover:bg-gray-100 transition-all duration-300" type="submit">
+                    {loading ? <button className="loading-spinner">.</button> : <button className="ml-[8px] border border-gray-200 md:text-2xl p-[5px] rounded-md hover:cursor-pointer hover:bg-gray-100 transition-all duration-300" type="submit">
                         Submit
                     </button>}
                     
@@ -86,7 +86,7 @@ export const HomeSection=()=>{
             <Toaster position="bottom-center"/>
 
         </div>
-        <div className="w-[550px] h-[200px] mt-[20px] overflow-y-auto">
+        <div className="w-3/4 md:w-[550px] h-[200px] mt-[20px] overflow-y-auto">
             {map}
         </div>
         </div>
