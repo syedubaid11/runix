@@ -11,6 +11,7 @@
 
 }
 
+
 body {
   background: var(--background);
   color: var(--foreground);
@@ -19,4 +20,58 @@ body {
 
 html{
   scroll-behavior: smooth;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 8px solid rgba(255, 255, 255, 0.2);
+  border-top-color: #ffffff; 
+  border-radius: 50%;
+  animation: spinner 0.8s linear infinite;
+  margin: auto; 
+}
+
+@keyframes spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+  
+.fade{
+  animation-name:fadein;
+  animation-duration: 2s;
+  animation-timing-function:cubic-bezier(0.445, 0.05, 0.55, 0.95);
+  animation-fill-mode: both;
+}
+
+@keyframes fadein {
+  from{
+    opacity: 0;
+
+  }
+  to{
+    opacity: 1;
+
+  }
+  
+}
+
+.slide-in{
+  animation-name: slidein;
+  animation-duration: 3s;
+  animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  animation-fill-mode: both;
+}
+
+@keyframes slidein {
+  from{
+    transform:translateX(-20px);
+
+  }
+  to{
+    transform: translate(none);
+
+  }
+  
 }

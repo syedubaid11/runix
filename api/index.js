@@ -1,11 +1,43 @@
 import express from 'express'
 import { ECSClient, RunTaskCommand} from '@aws-sdk/client-ecs';
+import { createServer } from 'node:http';
 import 'dotenv/config'
 import { z } from 'zod';
 import cors from 'cors';
+import { Server } from 'socket.io';
+import { Redis } from 'ioredis';
 
 const app=express();
 const PORT=9000;
+
+const subscriber=new Redis(process.env.upstash_redis);
+
+const io=new Server({cors:'*'});    //allowing all origins to connect 
+io.listen(9002,()=>{
+  console.log('Socket is running on 9001')
+})
+
+io.on('connection',(socket)=>{
+  //subscribing to logs
+  subscriber.psubscribe('logs:*',(err,count)=>{
+    if(err){
+      console.log('Redis subscription error',err);
+    }
+    else{
+      console.log(`Subscribed to ${count} log channel`);
+    }
+    subscriber.on('pmessage',(pattern,channel,message)=>{
+      console.log(`New log on channel ${channel}:${message}`);
+      socket.emit('log',{channel,message});      //emitting logs
+    })
+  })
+  console.log('A user has connected');
+  socket.on('disconnect',()=>{
+    console.log('User has disconnected')
+  })
+})
+
+
 app.use(express.json());
 app.use(cors({
   origin:'http://localhost:3000',
@@ -35,7 +67,7 @@ app.post('/project',async (req,res)=>{
     const command=new RunTaskCommand({
       launchType:"FARGATE",
       cluster:"runix-cluster",
-      taskDefinition:'arn:aws:ecs:ap-south-1:977099018494:task-definition/runix-v2:4',
+      taskDefinition:'arn:aws:ecs:ap-south-1:977099018494:task-definition/runix-v2:6',
       overrides:{
         containerOverrides:[
           {
@@ -63,6 +95,12 @@ app.post('/project',async (req,res)=>{
       },
     });
     const response=await client.send(command);
+
+    // function redisLogs(){
+    //   const logs=subscriber.subscribe(`logs:${project_id}`);
+    //   console.log(logs);
+    // }
+    
 
   }
   else{
