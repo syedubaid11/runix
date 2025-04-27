@@ -11,7 +11,7 @@ export const HomeSection=()=>{
     const [input,setInput]=useState('');
     const [deployment,setDeployment]=useState(false);
 
-    const ProjectId='t12'
+    const ProjectId='t13'
 
     useEffect(()=>{
         try {
@@ -35,7 +35,7 @@ export const HomeSection=()=>{
 
 
     const handleDeployment=()=>{
-        const link=`http://${ProjectId}.localhost:8000`
+        const link=`http://${ProjectId}.runix-orpin.vercel.app`
         window.location.href=link;
     }
     
