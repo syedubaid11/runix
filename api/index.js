@@ -18,13 +18,13 @@ app.use(cors({
   credentials:true,
 }))
 
-app.options(/(.*)/, cors()); //preflight requests
+app.options(/.*/, cors()); //preflight requests
 
 const subscriber=new Redis(process.env.upstash_redis);
 
 
 const io=new Server(server,
-  {cors:'*'}
+  {cors:/.*/}
 );    //allowing all origins to connect 
 io.listen(PORT,()=>{
   console.log('Socket is running on 9000')
