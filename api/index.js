@@ -46,6 +46,8 @@ app.use(cors({
   credentials:true,
 }))
 
+app.options('*', cors()); //preflight requests
+
 export const uploadSchema=z.object({
   git_url:z.string(),
   project_id:z.string()
