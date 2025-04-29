@@ -21,7 +21,7 @@ app.use(cors({
 //pre flight requests cors config
 app.options(/.*/, cors({
   origin: 'http://localhost:3000',
-  methods: ['POST', 'OPTIONS', 'GET'],
+  methods: ['POST','OPTIONS','GET'],
   credentials: true
 }));
 
@@ -30,7 +30,7 @@ const subscriber=new Redis(process.env.upstash_redis);
 const io = new Server(server, {
   cors: {
     origin: "http://localhost:3000",
-    methods: ["GET", "POST","OPTIONS"],
+    methods: ['GET','POST','OPTIONS'],
     credentials: true
   }
 });  
@@ -71,7 +71,6 @@ const client=new ECSClient({
 }) 
 
 app.post('/project',async (req,res)=>{
-  console.log('here');
   const result=uploadSchema.safeParse(req.body);
   console.log(req.body);
   if(result){
@@ -128,6 +127,7 @@ app.get('/test',(req,res)=>{
 
 app.post('/upload',(req,res)=>{
   console.log('you are here');
+  res.json({message:"hey you are in /test"})
 
 })
 
