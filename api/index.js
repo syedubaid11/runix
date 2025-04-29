@@ -77,6 +77,7 @@ app.post('/project',async (req,res)=>{
     const {git_url,project_id}=req.body;
 
     const command=new RunTaskCommand({
+      region:"ap-south-1",  
       launchType:"FARGATE",
       cluster:"runix-cluster",
       taskDefinition:'arn:aws:ecs:ap-south-1:977099018494:task-definition/runix-v2:6',
