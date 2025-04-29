@@ -30,7 +30,7 @@ const subscriber=new Redis(process.env.upstash_redis);
 const io = new Server(server, {
   cors: {
     origin: "http://localhost:3000",
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST","OPTIONS"],
     credentials: true
   }
 });  
@@ -118,6 +118,10 @@ app.post('/project',async (req,res)=>{
   else{
     res.json({message:"Error while parsing"})
   }
+})
+
+app.get('/test',(req,res)=>{
+  console.log('This is working');
 })
 
 app.listen(PORT,()=>{
