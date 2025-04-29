@@ -11,7 +11,7 @@ export const HomeSection=()=>{
     const [input,setInput]=useState('');
     const [deployment,setDeployment]=useState(false);
 
-    const ProjectId='t13'
+    const ProjectId='t14'
 
     // useEffect(()=>{
     //     try {
@@ -56,7 +56,7 @@ export const HomeSection=()=>{
             const repolink=input.trim();
             try {
                 console.log(input.trim())
-                const response=await axios.post('runix-production.up.railway.app/project',{
+                const response=await axios.post('https://runix-production.up.railway.app/project',{
                     git_url: repolink,
                     project_id:ProjectId
                 })

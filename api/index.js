@@ -71,6 +71,7 @@ const client=new ECSClient({
 }) 
 
 app.post('/project',async (req,res)=>{
+  console.log('here');
   const result=uploadSchema.safeParse(req.body);
   console.log(req.body);
   if(result){
@@ -123,6 +124,11 @@ app.post('/project',async (req,res)=>{
 
 app.get('/test',(req,res)=>{
   console.log('This is working');
+})
+
+app.post('/upload',(req,res)=>{
+  console.log('you are here');
+
 })
 
 app.listen(PORT,()=>{
