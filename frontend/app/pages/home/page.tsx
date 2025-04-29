@@ -15,7 +15,7 @@ export const HomeSection=()=>{
 
     useEffect(()=>{
         try {
-            const socket=io('http://localhost:9000');
+            const socket=io('https://runix-production.up.railway.app');
             console.log(socket);
             socket.on('log', ({ channel, message }) => {               
                 setLogs((prevLogs)=>[...prevLogs,`${message}`])
@@ -29,7 +29,7 @@ export const HomeSection=()=>{
                 }
               });  
         } catch (error) {
-            console.log('error while connectingq to socket',error);
+            console.log('error while connecting to socket',error);
         }
     },[ProjectId])
 

@@ -1,6 +1,6 @@
 import express from 'express'
 import { ECSClient, RunTaskCommand} from '@aws-sdk/client-ecs';
-import { createServer } from 'node:http';
+import http from 'http';
 import 'dotenv/config'
 import { z } from 'zod';
 import cors from 'cors';
@@ -9,6 +9,7 @@ import { Redis } from 'ioredis';
 
 const app=express();
 const PORT=9000;
+const server=http.createServer(app);
 
 app.use(express.json());
 app.use(cors({
@@ -17,12 +18,14 @@ app.use(cors({
   credentials:true,
 }))
 
-app.options('*', cors()); //preflight requests
+app.options(/(.*)/, cors()); //preflight requests
 
 const subscriber=new Redis(process.env.upstash_redis);
 
 
-const io=new Server({cors:'*'});    //allowing all origins to connect 
+const io=new Server(server,
+  {cors:'*'}
+);    //allowing all origins to connect 
 io.listen(PORT,()=>{
   console.log('Socket is running on 9000')
 })
