@@ -15,7 +15,7 @@ export const HomeSection=()=>{
 
     useEffect(()=>{
         try {
-            const socket=io('http://localhost:9002');
+            const socket=io('http://localhost:9000');
             console.log(socket);
             socket.on('log', ({ channel, message }) => {               
                 setLogs((prevLogs)=>[...prevLogs,`${message}`])
