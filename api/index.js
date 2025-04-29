@@ -18,14 +18,22 @@ app.use(cors({
   credentials:true,
 }))
 
+//pre flight requests cors config
+app.options(/.*/, cors({
+  origin: 'http://localhost:3000',
+  methods: ['POST', 'OPTIONS', 'GET'],
+  credentials: true
+}));
+
 const subscriber=new Redis(process.env.upstash_redis);
 
-const io=new Server(server,
-  {cors:/.*/}
-);    //allowing all origins to connect 
-io.listen(PORT,()=>{
-  console.log('Socket is running on 9000')
-})
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
+    credentials: true
+  }
+});  
 
 io.on('connection',(socket)=>{
   //subscribing to logs
