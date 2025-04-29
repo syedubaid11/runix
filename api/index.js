@@ -10,6 +10,15 @@ import { Redis } from 'ioredis';
 const app=express();
 const PORT=9000;
 
+app.use(express.json());
+app.use(cors({
+  origin:'http://localhost:3000',
+  methods:['POST','OPTIONS','GET'],
+  credentials:true,
+}))
+
+app.options('*', cors()); //preflight requests
+
 const subscriber=new Redis(process.env.upstash_redis);
 
 
@@ -39,14 +48,6 @@ io.on('connection',(socket)=>{
 })
 
 
-app.use(express.json());
-app.use(cors({
-  origin:'http://localhost:3000',
-  methods:['POST','OPTIONS'],
-  credentials:true,
-}))
-
-app.options('*', cors()); //preflight requests
 
 export const uploadSchema=z.object({
   git_url:z.string(),
