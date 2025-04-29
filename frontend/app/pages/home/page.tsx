@@ -56,7 +56,7 @@ export const HomeSection=()=>{
             const repolink=input.trim();
             try {
                 console.log(input.trim())
-                const response=await axios.post('http://localhost:9000/project',{
+                const response=await axios.post('https://runix-production.up.railway.app/project',{
                     git_url: repolink,
                     project_id:ProjectId
                 })

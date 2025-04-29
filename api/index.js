@@ -12,6 +12,7 @@ const PORT=9000;
 
 const subscriber=new Redis(process.env.upstash_redis);
 
+
 const io=new Server({cors:'*'});    //allowing all origins to connect 
 io.listen(PORT,()=>{
   console.log('Socket is running on 9000')
@@ -41,7 +42,7 @@ io.on('connection',(socket)=>{
 app.use(express.json());
 app.use(cors({
   origin:'http://localhost:3000',
-  methods:['POST'],
+  methods:['POST','OPTIONS'],
   credentials:true,
 }))
 
