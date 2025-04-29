@@ -18,10 +18,7 @@ app.use(cors({
   credentials:true,
 }))
 
-app.options(/.*/, cors()); //preflight requests
-
 const subscriber=new Redis(process.env.upstash_redis);
-
 
 const io=new Server(server,
   {cors:/.*/}
