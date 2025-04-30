@@ -33,7 +33,7 @@ const io = new Server(server, {
     methods: ['GET','POST','OPTIONS'],
     credentials: true
   }
-});  
+});   
 
 io.on('connection',(socket)=>{
   //subscribing to logs

@@ -13,25 +13,28 @@ export const HomeSection=()=>{
 
     const ProjectId='t14'
 
-    // useEffect(()=>{
-    //     try {
-    //         const socket=io('https://runix-production.up.railway.app');
-    //         console.log(socket);
-    //         socket.on('log', ({ channel, message }) => {               
-    //             setLogs((prevLogs)=>[...prevLogs,`${message}`])
-    //             console.log(`[${channel}]: ${message}`);
-    //             if(message==="Deployment Complete"){
-    //                 setLoading(false);
-    //                 setDeployment(true);
-    //                 toast.success('Deployment Complete!');
+    useEffect(()=>{
+        try {
+            const socket=io('https://runix-production.up.railway.app',{
+                reconnectionAttempts:3,
+                timeout:5000,
+            });
+            console.log(socket);
+            socket.on('log', ({ channel, message }) => {               
+                setLogs((prevLogs)=>[...prevLogs,`${message}`])
+                console.log(`[${channel}]: ${message}`);
+                if(message==="Deployment Complete"){
+                    setLoading(false);
+                    setDeployment(true);
+                    toast.success('Deployment Complete!');
                     
 
-    //             }
-    //           });  
-    //     } catch (error) {
-    //         console.log('error while connecting to socket',error);
-    //     }
-    // },[ProjectId])
+                }
+              });  
+        } catch (error) {
+            console.log('error while connecting to socket',error);
+        }
+    },[ProjectId])
 
 
     const handleDeployment=()=>{
@@ -56,7 +59,7 @@ export const HomeSection=()=>{
             const repolink=input.trim();
             try {
                 console.log(input.trim())
-                const response=await axios.post('https://runix-production.up.railway.app/upload',{
+                const response=await axios.post('https://runix-production.up.railway.app/project',{
                     git_url: repolink,
                     project_id:ProjectId
                 })
