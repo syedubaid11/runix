@@ -32,7 +32,8 @@ const io = new Server(server, {
     origin: "http://localhost:3000",
     methods: ['GET','POST','OPTIONS'],
     credentials: true
-  }
+  },
+  path:'/socket.io/'
 });   
 
 io.on('connection',(socket)=>{

@@ -18,6 +18,9 @@ export const HomeSection=()=>{
             const socket=io('https://runix-production.up.railway.app',{
                 reconnectionAttempts:3,
                 timeout:5000,
+                path:'/socket.io/',
+                transports:['websocket','polling'],
+                withCredentials:true,
             });
             console.log(socket);
             socket.on('log', ({ channel, message }) => {               
