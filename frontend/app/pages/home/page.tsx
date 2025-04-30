@@ -13,29 +13,29 @@ export const HomeSection=()=>{
 
     const ProjectId='t14'
 
-    useEffect(()=>{
-        try {
-            const socket=io('wss://runix-production.up.railway.app',{
-                reconnectionAttempts:3,
-                timeout:5000,
+    // useEffect(()=>{
+    //     try {
+    //         const socket=io('wss://runix-production.up.railway.app',{
+    //             reconnectionAttempts:3,
+    //             timeout:5000,
                 
-            });
-            console.log(socket);
-            socket.on('log', ({ channel, message }) => {               
-                setLogs((prevLogs)=>[...prevLogs,`${message}`])
-                console.log(`[${channel}]: ${message}`);
-                if(message==="Deployment Complete"){
-                    setLoading(false);
-                    setDeployment(true);
-                    toast.success('Deployment Complete!');
+    //         });
+    //         console.log(socket);
+    //         socket.on('log', ({ channel, message }) => {               
+    //             setLogs((prevLogs)=>[...prevLogs,`${message}`])
+    //             console.log(`[${channel}]: ${message}`);
+    //             if(message==="Deployment Complete"){
+    //                 setLoading(false);
+    //                 setDeployment(true);
+    //                 toast.success('Deployment Complete!');
                     
 
-                }
-              });  
-        } catch (error) {
-            console.log('error while connecting to socket',error);
-        }
-    },[ProjectId])
+    //             }
+    //           });  
+    //     } catch (error) {
+    //         console.log('error while connecting to socket',error);
+    //     }
+    // },[ProjectId])
 
 
     const handleDeployment=()=>{
