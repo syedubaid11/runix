@@ -27,33 +27,34 @@ app.options(/.*/, cors({
 
 const subscriber=new Redis(process.env.upstash_redis);
 
-// const io = new Server(server, {
-//   cors: {
-//     origin: "http://localhost:3000",
-//     methods: ['GET','POST','OPTIONS'],
-//     credentials: true
-//   },
-// });   
+const io = new Server(server, {
+  cors: {
+    origin: 'http://localhost:3000',
+    methods: ['GET','POST','OPTIONS'],
+    allowedHeaders: ['Content-Type'],
+    credentials: true
+  },
+});   
 
-// io.on('connection',(socket)=>{
-//   //subscribing to logs
-//   subscriber.psubscribe('logs:*',(err,count)=>{
-//     if(err){
-//       console.log('Redis subscription error',err);
-//     }
-//     else{
-//       console.log(`Subscribed to ${count} log channel`);
-//     }
-//     subscriber.on('pmessage',(pattern,channel,message)=>{   
-//       console.log(`New log on channel ${channel}:${message}`);
-//       socket.emit('log',{channel,message});      //emitting logs
-//     })
-//   })
-//   console.log('A user has connected');
-//   socket.on('disconnect',()=>{
-//     console.log('User has disconnected')
-//   })
-// })
+io.on('connection',(socket)=>{
+  //subscribing to logs
+  subscriber.psubscribe('logs:*',(err,count)=>{
+    if(err){
+      console.log('Redis subscription error',err);
+    }
+    else{
+      console.log(`Subscribed to ${count} log channel`);
+    }
+    subscriber.on('pmessage',(pattern,channel,message)=>{   
+      console.log(`New log on channel ${channel}:${message}`);
+      socket.emit('log',{channel,message});      //emitting logs
+    })
+  })
+  console.log('A user has connected');
+  socket.on('disconnect',()=>{
+    console.log('User has disconnected')
+  })
+})
 
 
 
