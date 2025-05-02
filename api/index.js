@@ -132,7 +132,6 @@ app.post('/upload',(req,res)=>{
 
 })
 
-app.listen(PORT,()=>{
-    console.log(`Api server is running on ${PORT}`)
+server.listen(PORT,()=>{
+  console.log('Server is running on PORT:',PORT);
 })
-

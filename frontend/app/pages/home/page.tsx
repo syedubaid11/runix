@@ -15,9 +15,10 @@ export const HomeSection=()=>{
 
     useEffect(()=>{
         try {
-            const socket=io('runix-api-djfsggajdzdda7eq.centralindia-01.azurewebsites.net/project',{
+            const socket=io('wss://runix-v2-api-hzdbg5dfggdfcgby.centralindia-01.azurewebsites.net',{
                 reconnectionAttempts:3,
                 timeout:5000,
+                transports:["websocket"]
                 
             });
             console.log(socket);
@@ -35,8 +36,7 @@ export const HomeSection=()=>{
         } catch (error) {
             console.log('error while connecting to socket',error);
         }
-    },[ProjectId])
-
+    },[ProjectId ])
 
     const handleDeployment=()=>{
         const link=`http://${ProjectId}.runix-orpin.vercel.app`
@@ -60,7 +60,7 @@ export const HomeSection=()=>{
             const repolink=input.trim();
             try {
                 console.log(input.trim())
-                const response=await axios.post('https://runix-production.up.railway.app/project',{
+                const response=await axios.post('https://runix-v2-api-hzdbg5dfggdfcgby.centralindia-01.azurewebsites.net/project',{
                     git_url: repolink,
                     project_id:ProjectId
                 })
