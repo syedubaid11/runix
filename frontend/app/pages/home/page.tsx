@@ -19,7 +19,6 @@ export const HomeSection=()=>{
                 reconnectionAttempts:3,
                 timeout:5000,
                 transports:["websocket"]
-                
             });
             console.log(socket);
             socket.on('log', ({ channel, message }) => {               

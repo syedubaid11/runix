@@ -8,7 +8,7 @@ import { Server } from 'socket.io';
 import { Redis } from 'ioredis';
 
 const app=express();
-const PORT=9000;
+const PORT=process.env.PORT || 9000;
 const server=http.createServer(app);
 
 app.use(express.json());
