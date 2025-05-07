@@ -15,12 +15,15 @@ export const HomeSection=()=>{
 
     useEffect(()=>{
         try {
-            const socket=io('wss://runix-v2-api-hzdbg5dfggdfcgby.centralindia-01.azurewebsites.net',{
+            const socket=io('http://13.232.228.186:9001',{
                 reconnectionAttempts:3,
                 timeout:5000,
                 transports:["websocket"]
             });
             console.log(socket);
+            socket.on('connection',()=>{
+                console.log('Connected')
+            })
             socket.on('log', ({ channel, message }) => {               
                 setLogs((prevLogs)=>[...prevLogs,`${message}`])
                 console.log(`[${channel}]: ${message}`);
@@ -36,6 +39,21 @@ export const HomeSection=()=>{
             console.log('error while connecting to socket',error);
         }
     },[ProjectId ])
+
+    useEffect(()=>{
+        const fetch=async()=>{
+            try {
+                const res=await axios.get('http://13.232.228.186:9000/test');
+                console.log(res.data);
+            } catch (error) {
+                console.log(error);
+            }
+
+        }
+        fetch();
+      
+
+    },[])
 
     const handleDeployment=()=>{
         const link=`http://${ProjectId}.runix-orpin.vercel.app`
