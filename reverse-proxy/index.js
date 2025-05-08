@@ -8,13 +8,12 @@ const BASE_PATH="https://runix-v2.s3.ap-south-1.amazonaws.com/__outputs"
 
 const proxy=httpProxy.createProxy()
 
-app.listen(PORT,()=>{
+app.listen(PORT || process.env.reversePorxyPORT ,()=>{
     console.log('Reverse Proxy listening on PORT:',PORT)
 })
 
 app.use((req,res)=>{
     const hostname=req.hostname;
-    console.log(hostname);
     const subdomain=hostname.split('.')[0];
 
     const resolvesTo=`${BASE_PATH}/${subdomain}`
@@ -24,7 +23,6 @@ app.use((req,res)=>{
 
 proxy.on('proxyReq',(proxyReq,req,res)=>{
     const url=req.url
-    console.log(url)
     if(url=="/"){
         proxyReq.path+='index.html'
         return proxyReq;

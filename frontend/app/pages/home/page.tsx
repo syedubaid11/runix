@@ -11,7 +11,7 @@ export const HomeSection=()=>{
     const [input,setInput]=useState('');
     const [deployment,setDeployment]=useState(false);
 
-    const ProjectId='t14'
+    const ProjectId='t20'
 
     useEffect(()=>{
         try {
@@ -56,7 +56,7 @@ export const HomeSection=()=>{
     },[])
 
     const handleDeployment=()=>{
-        const link=`http://${ProjectId}.runix-orpin.vercel.app`
+        const link=`http://${ProjectId}.localhost:8000/`
         window.location.href=link;
     }
     
@@ -77,7 +77,7 @@ export const HomeSection=()=>{
             const repolink=input.trim();
             try {
                 console.log(input.trim())
-                const response=await axios.post('https://runix-v2-api-hzdbg5dfggdfcgby.centralindia-01.azurewebsites.net/project',{
+                const response=await axios.post('http://13.232.228.186:9000/project',{
                     git_url: repolink,
                     project_id:ProjectId
                 })
