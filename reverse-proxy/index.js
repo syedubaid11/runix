@@ -15,6 +15,7 @@ app.listen(PORT || process.env.reversePorxyPORT ,()=>{
 app.use((req,res)=>{
     const hostname=req.hostname;
     const subdomain=hostname.split('.')[0];
+    console.log(subdomain);
 
     const resolvesTo=`${BASE_PATH}/${subdomain}`
 

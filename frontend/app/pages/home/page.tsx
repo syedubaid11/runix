@@ -56,7 +56,7 @@ export const HomeSection=()=>{
     },[])
 
     const handleDeployment=()=>{
-        const link=`http://${ProjectId}.localhost:8000/`
+        const link=`http://13.232.228.186:8000/${ProjectId}`
         window.location.href=link;
     }
     
