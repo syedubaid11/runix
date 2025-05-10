@@ -12,15 +12,27 @@ app.listen(PORT || process.env.reversePorxyPORT ,()=>{
     console.log('Reverse Proxy listening on PORT:',PORT)
 })
 
-app.use((req,res)=>{
-    const hostname=req.hostname;
-    const subdomain=hostname.split('.')[0];
-    console.log(subdomain);
+//middleware to catch the project id
+app.use('/p/:projectId',(req,res,next)=>{
+    req.projectId=req.params.projectId;
+    next();
+})
 
-    const resolvesTo=`${BASE_PATH}/${subdomain}`
-
+// proxy for the intial index.html request
+app.use('/p/:projectId',(req,res)=>{
+    const resolvesTo=`${BASE_PATH}/${req.projectId}`
+    console.log(resolvesTo);
     proxy.web(req,res,{target:resolvesTo, changeOrigin:true})
 })
+
+// proxy for assets folder
+app.use('/assets/',(req,res)=>{
+    const resolvesTo=`${BASE_PATH}/${req.projectId}/assets`
+    console.log(resolvesTo);
+    proxy.web(req,res,{target:resolvesTo, changeOrigin:true})
+    
+})
+
 
 proxy.on('proxyReq',(proxyReq,req,res)=>{
     const url=req.url

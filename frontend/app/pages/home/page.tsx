@@ -4,17 +4,21 @@ import { useEffect, useState } from "react";
 import axios from 'axios';
 import { io } from 'socket.io-client';
 import '../../globals.css'
+import { uuid } from "uuidv4";
 
 export const HomeSection=()=>{
     const [logs,setLogs]=useState(['']);
     const [loading,setLoading]=useState(false);
     const [input,setInput]=useState('');
     const [deployment,setDeployment]=useState(false);
+    const [ProjectId,setProjectId]=useState('')
+    const [ws,setWs]=useState(false);
 
-    const ProjectId='t20'
 
     useEffect(()=>{
-        try {
+        if(ws){
+            try {
+            
             const socket=io('http://13.232.228.186:9001',{
                 reconnectionAttempts:3,
                 timeout:5000,
@@ -38,25 +42,15 @@ export const HomeSection=()=>{
         } catch (error) {
             console.log('error while connecting to socket',error);
         }
-    },[ProjectId ])
-
-    useEffect(()=>{
-        const fetch=async()=>{
-            try {
-                const res=await axios.get('http://13.232.228.186:9000/test');
-                console.log(res.data);
-            } catch (error) {
-                console.log(error);
-            }
-
         }
-        fetch();
-      
-
-    },[])
-
+        else{
+            return;
+        }
+        
+    },[ws])
+     
     const handleDeployment=()=>{
-        const link=`http://13.232.228.186:8000/${ProjectId}`
+        const link=`http://13.232.228.186:8000/p/${ProjectId}`
         window.location.href=link;
     }
     
@@ -73,13 +67,19 @@ export const HomeSection=()=>{
         if(!isValidRepoUrl(input)){
             toast.error('Please enter a valid Repo Url');
         }
+        else{
+            setWs(true);
             setLoading(true);
             const repolink=input.trim();
+
+            const pId=uuid();
+            setProjectId(pId);
+            
             try {
-                console.log(input.trim())
+                console.log(ProjectId);
                 const response=await axios.post('http://13.232.228.186:9000/project',{
                     git_url: repolink,
-                    project_id:ProjectId
+                    project_id:pId
                 })
                 toast.success('Searching...')
                 console.log(response);
@@ -89,8 +89,10 @@ export const HomeSection=()=>{
                 console.log('Request Failed',error);
                 
             }
-        
         setInput('');
+
+        }
+            
     }
     const map=logs.map((item,index)=>{
         return(
@@ -106,10 +108,9 @@ export const HomeSection=()=>{
             <div className="flex flex-row items-center justify-center mt-[20px]">
                   <form onSubmit={handleSubmit} className="flex items-center md:text-2xl  duration-300" >
                     <input className="cursor-pointer p-[3px] rounded-sm focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all"type="text" value={input} onChange={(e)=>{setInput(e.target.value)}} placeholder="Enter the Repository Url..."/>
-                    {loading ?<button className="ml-[24px] font-mono text-[20px] flex flex-row items-center gap-[8px]"> <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none" className="hds-flight-icon--animation-loading animate-spin h-[25px] w-[25px]"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g fill="#000000" fill-rule="evenodd" clip-rule="evenodd"> <path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 8a8 8 0 1116 0A8 8 0 010 8z" opacity=".2"></path> <path d="M7.25.75A.75.75 0 018 0a8 8 0 018 8 .75.75 0 01-1.5 0A6.5 6.5 0 008 1.5a.75.75 0 01-.75-.75z"></path> </g> </g></svg> Processing</button> : <button className="font-mono ml-[8px] border border-gray-200 md:text-2xl p-[5px] rounded-md hover:cursor-pointer hover:bg-gray-100 transition-all duration-300" type="submit">
+                    {loading ?<button type="button" className="ml-[24px] font-mono text-[20px] flex flex-row items-center gap-[8px]"> <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none" className="hds-flight-icon--animation-loading animate-spin h-[25px] w-[25px]"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g fill="#000000" fill-rule="evenodd" clip-rule="evenodd"> <path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 8a8 8 0 1116 0A8 8 0 010 8z" opacity=".2"></path> <path d="M7.25.75A.75.75 0 018 0a8 8 0 018 8 .75.75 0 01-1.5 0A6.5 6.5 0 008 1.5a.75.75 0 01-.75-.75z"></path> </g> </g></svg> Processing</button> : <button className="font-mono ml-[8px] border border-gray-200 md:text-2xl p-[5px] rounded-md hover:cursor-pointer hover:bg-gray-100 transition-all duration-300" type="submit">
                         submit
                     </button>}
-                    
                    </form>
             </div>
             

@@ -56,8 +56,6 @@ io.on('connection',(socket)=>{
   })
 })
 
-
-
 export const uploadSchema=z.object({
   git_url:z.string(),
   project_id:z.string()
@@ -109,27 +107,10 @@ app.post('/project',async (req,res)=>{
       },
     });
     const response=await client.send(command);
-
-    // function redisLogs(){
-    //   const logs=subscriber.subscribe(`logs:${project_id}`);
-    //   console.log(logs);
-    // }
-    
-
   }
   else{
     res.json({message:"Error while parsing"})
   }
-})
-
-app.get('/test',(req,res)=>{
-  console.log('This is working');
-})
-
-app.post('/upload',(req,res)=>{
-  console.log('you are here');
-  res.json({message:"hey you are in /test"})
-
 })
 
 server.listen(PORT,()=>{
