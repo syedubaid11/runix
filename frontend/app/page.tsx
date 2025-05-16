@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { HomeSection } from "./pages/home/page";
+import HomeSection from "./pages/home/page";
 import { Sidebar } from "./components/sidebar";
 import { About } from "./components/about";
 import { SystemD } from "./components/systemd";
