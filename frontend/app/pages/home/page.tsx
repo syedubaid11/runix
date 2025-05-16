@@ -5,8 +5,32 @@ import axios from 'axios';
 import { io } from 'socket.io-client';
 import '../../globals.css'
 import { uuid } from "uuidv4";
+import gsap from 'gsap';
+import { ScrambleTextPlugin } from "gsap/all";
+import { useRef } from "react";
 
-export const HomeSection=()=>{
+
+export default function HomeSection(){
+    
+    gsap.registerPlugin(ScrambleTextPlugin);
+    const textRef=useRef(null);
+    const text2Ref=useRef(null);
+
+    useEffect(()=>{
+       gsap.to(text2Ref.current,{
+        duration:3.3,
+        scrambleText:'deploy in seconds',
+        speed:0.5,
+        revealDelay:0.2
+       })
+
+        gsap.to(textRef.current,{
+        duration:2,
+        scrambleText:"runix",
+        speed:0.5,
+        revealDelay:0.8
+    })
+    },[])
     const [logs,setLogs]=useState(['']);
     const [loading,setLoading]=useState(false);
     const [input,setInput]=useState('');
@@ -104,7 +128,7 @@ export const HomeSection=()=>{
     return(
         <div className="flex flex-col justify-center items-center">
         <div className="tracking-tight">
-            <span className="tracking-tighter text-[55px] md:text-[100px] font-bold">runix</span><span className="fade text-[20px] md:text-[30px] font-mono tracking-tight">   deploy in seconds</span>
+            <span ref={textRef} className="tracking-tighter text-[55px] md:text-[100px] font-bold">runix</span><span ref={text2Ref} className="ml-[10px] fade text-[20px] md:text-[30px] font-mono tracking-tight">deploy in seconds</span>
             <div className="flex flex-row items-center justify-center mt-[20px]">
                   <form onSubmit={handleSubmit} className="flex items-center md:text-2xl  duration-300" >
                     <input className="cursor-pointer p-[3px] rounded-sm focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all"type="text" value={input} onChange={(e)=>{setInput(e.target.value)}} placeholder="Enter the Repository Url..."/>
